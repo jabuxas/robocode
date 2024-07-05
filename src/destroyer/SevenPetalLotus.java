@@ -1,16 +1,11 @@
 package destroyer;
 import robocode.*;
-import robocode.Robot;
 
 import java.awt.*;
 
-public class FirstDestroyer extends Robot {
+public class SevenPetalLotus extends AdvancedRobot {
   /**
-   * FirstDestroyer - a robot by lucas b.
-   */
-  
-  /**
-   * run: MyFirstRobot's default behavior
+   * SevenPetalLotus - a robot by lucas b.
    */
   
   public void run() {
@@ -24,10 +19,9 @@ public class FirstDestroyer extends Robot {
     // Robot main loop
     while (true) {
       // Replace the next 4 lines with any behavior you would like
-      ahead(200);
-      turnGunRight(180);
-      back(50);
-      turnGunRight(180);
+      setTurnRight(1000);
+      setMaxTurnRate(3);
+      ahead(1000);
     }
   }
   
@@ -67,4 +61,11 @@ public class FirstDestroyer extends Robot {
     ahead(100);
   }
   
+  public void onHitRobot(HitRobotEvent event) {
+    turnRight(event.getBearing());
+    fire(3);
+    if (event.isMyFault()) {
+      turnLeft(10);
+    }
+  }
 }
