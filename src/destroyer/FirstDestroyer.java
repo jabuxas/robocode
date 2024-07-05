@@ -1,12 +1,14 @@
 package destroyer;
-
 import robocode.*;
+import robocode.Robot;
+
+import java.awt.*;
 
 public class FirstDestroyer extends Robot {
-// API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
   /**
-   * MyFirstRobot - a robot by (your name here)
+   * FirstDestroyer - a robot by lucas b.
    */
+  
   /**
    * run: MyFirstRobot's default behavior
    */
@@ -14,18 +16,18 @@ public class FirstDestroyer extends Robot {
   public void run() {
     // Initialization of the robot should be put here
     
-    // After trying out your robot, try uncommenting the import at the top,
-    // and the next line:
-    
-    // setColors(Color.red,Color.blue,Color.green); // body,gun,radar
+    setBodyColor(Color.magenta);
+    setGunColor(Color.cyan);
+    setRadarColor(Color.yellow);
+    setBulletColor(Color.orange);
     
     // Robot main loop
     while (true) {
       // Replace the next 4 lines with any behavior you would like
-      ahead(100);
-      turnGunRight(360);
-      back(100);
-      turnGunRight(360);
+      ahead(200);
+      turnGunRight(180);
+      back(50);
+      turnGunRight(180);
     }
   }
   
@@ -33,8 +35,17 @@ public class FirstDestroyer extends Robot {
    * onScannedRobot: What to do when you see another robot
    */
   public void onScannedRobot(ScannedRobotEvent e) {
-    // Replace the next line with any behavior you would like
-    fire(1);
+    double distance = e.getDistance();
+    if (distance > 800) {
+      turnRight(e.getBearing());
+      ahead(100);
+      fire(3);
+    } else if (distance <= 800 && distance >= 400) {
+      turnRight(e.getBearing());
+      fire(5);
+    } else {
+      fire(6);
+    }
   }
   
   /**
@@ -43,14 +54,17 @@ public class FirstDestroyer extends Robot {
   public void onHitByBullet(HitByBulletEvent e) {
     // Replace the next line with any behavior you would like
     back(10);
+    turnRight(20);
+    ahead(20);
   }
   
   /**
    * onHitWall: What to do when you hit a wall
    */
   public void onHitWall(HitWallEvent e) {
-    // Replace the next line with any behavior you would like
-    back(20);
+    double bearing = e.getBearing();
+    turnRight(-bearing);
+    ahead(100);
   }
   
 }
