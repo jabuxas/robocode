@@ -1,6 +1,5 @@
 package destroyer;
 import robocode.*;
-
 import java.awt.*;
 public class Witness extends AdvancedRobot {
   /**
@@ -14,6 +13,7 @@ public class Witness extends AdvancedRobot {
     setRadarColor(Color.yellow);
     setBulletColor(Color.orange);
     setAdjustRadarForGunTurn(true);
+    
     setTurnRadarRight(10000);
     execute();
     
