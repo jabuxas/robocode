@@ -59,10 +59,12 @@ public class Singularity extends AdvancedRobot {
     }
     
     void doMovement() {
+      setTurnRight(10);
       if (enemy.getDistance() > 200)
         setAhead(enemy.getDistance() / 2);
       if (enemy.getDistance() < 100)
         setBack(enemy.getDistance() * 2);
+      setTurnLeft(10);
     }
     
     void doGun() {
