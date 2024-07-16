@@ -9,8 +9,8 @@ public class ULTRON extends AdvancedRobot {
     // Método principal do robô, executado quando a batalha começa
     public void run() {
         // Personalização de cores do robô
-        setBodyColor(Color.DARK_GRAY); // Define a cor do corpo do robô como cinza escuro
-        setGunColor(Color.RED); // Define a cor da arma do robô como vermelha
+        setBodyColor(Color.darkGray); // Define a cor do corpo do robô como cinza escuro
+        setGunColor(Color.darkGray); // Define a cor da arma do robô como vermelha
         setRadarColor(Color.YELLOW); // Define a cor do radar do robô como amarela
         setBulletColor(Color.MAGENTA); // Define a cor das balas disparadas pelo robô como magenta
         setScanColor(Color.CYAN); // Define a cor do feixe de escaneamento do robô como ciano
