@@ -51,6 +51,7 @@ public class Singularity extends AdvancedRobot {
       setGunColor(randomColor());
       setRadarColor(randomColor());
       setBulletColor(randomColor());
+      setScanColor(randomColor());
   }
   
   void doScanner() {
@@ -89,6 +90,7 @@ public class Singularity extends AdvancedRobot {
       turnLeft(30);
     }
   }
+  
     private Color randomColor() {
       return new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
     }
