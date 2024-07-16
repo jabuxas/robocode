@@ -1,88 +1,65 @@
 package exterminators;
 
-import robocode.*;
-import robocode.util.Utils;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.Color;
+import robocode.*; // Importa a biblioteca principal do Robocode
+import robocode.util.Utils; // Importa utilitários do Robocode para cálculos de ângulos
+import java.awt.Color; // Importa a classe Color da biblioteca Java para personalização de cores
 
+// Define a classe ULTRON que estende a classe Robot
 public class ULTRON extends AdvancedRobot {
-    private Point2D.Double myLocation;
-    private Point2D.Double enemyLocation;
-
-    @Override
+    // Método principal do robô, executado quando a batalha começa
     public void run() {
-        // Personalização de cores
-        setBodyColor(Color.DARK_GRAY);
-        setGunColor(Color.RED);
-        setRadarColor(Color.YELLOW);
-        setBulletColor(Color.MAGENTA);
-        setScanColor(Color.CYAN);
+        // Personalização de cores do robô
+        setBodyColor(Color.DARK_GRAY); // Define a cor do corpo do robô como cinza escuro
+        setGunColor(Color.RED); // Define a cor da arma do robô como vermelha
+        setRadarColor(Color.YELLOW); // Define a cor do radar do robô como amarela
+        setBulletColor(Color.MAGENTA); // Define a cor das balas disparadas pelo robô como magenta
+        setScanColor(Color.CYAN); // Define a cor do feixe de escaneamento do robô como ciano
 
+        // Permite que a arma e o radar girem independentemente do corpo do robô
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForRobotTurn(true);
-        setAdjustRadarForGunTurn(true);
 
+        // Loop principal do robô
         while (true) {
+            // Gira o radar indefinidamente para a direita para escanear o campo de batalha
             setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
-            execute();
+            execute(); // Executa todas as ações pendentes
         }
     }
 
-    @Override
+    // Método chamado quando um robô inimigo é escaneado pelo radar
     public void onScannedRobot(ScannedRobotEvent e) {
-        myLocation = new Point2D.Double(getX(), getY());
+        // Calcula a direção absoluta do inimigo
+        double anguloAbsoluto = e.getBearingRadians() + getHeadingRadians();
+        // Calcula a velocidade lateral do inimigo
+        double velocidadeLateral = getVelocity() * Math.sin(e.getBearingRadians());
 
-        double lateralVelocity = getVelocity() * Math.sin(e.getBearingRadians());
-        double absBearing = e.getBearingRadians() + getHeadingRadians();
-        double distance = e.getDistance();
+        // Ajusta a direção da arma para mirar no inimigo
+        setTurnGunRightRadians(Utils.normalRelativeAngle(anguloAbsoluto - getGunHeadingRadians() + velocidadeLateral / 22));
 
-
-        setTurnGunRightRadians(Utils.normalRelativeAngle(absBearing - getGunHeadingRadians() + lateralVelocity / 22));
-
-
+        // Verifica se a energia do robô é maior que 2 antes de disparar
         if (getEnergy() > 2) {
-            setFire(2);
+            setFire(2); // Dispara uma bala com potência 2
         }
 
-
-        double moveAngle = Utils.normalRelativeAngle(absBearing + Math.PI / 2 - (distance > 150 ? 0.5 : -0.5));
-        moveAngle = wallSmoothing(myLocation, moveAngle, distance > 150 ? 1 : -1);
-
-        setTurnRightRadians(Utils.normalRelativeAngle(moveAngle - getHeadingRadians()));
-        setAhead(100);
-
-
-        enemyLocation = project(myLocation, absBearing, e.getDistance());
+        // Calcula o ângulo de movimento para evitar colisões e se manter em movimento
+        double anguloMovimento = Utils.normalRelativeAngle(anguloAbsoluto + Math.PI / 2 - 0.5);
+        // Ajusta a direção do movimento e se move para frente
+        setTurnRightRadians(Utils.normalRelativeAngle(anguloMovimento - getHeadingRadians()));
+        setAhead(100); // Move o robô para frente
     }
 
-    @Override
+    // Método chamado quando o robô é atingido por uma bala
     public void onHitByBullet(HitByBulletEvent e) {
-
+        // Ajusta a direção do robô para evitar mais tiros
         setTurnRight(90 - e.getBearing());
-        setAhead(100);
+        setAhead(100); // Move o robô para frente
     }
 
-    @Override
+    // Método chamado quando o robô colide com uma parede
     public void onHitWall(HitWallEvent e) {
-
-        setBack(50);
-        setTurnRight(45);
-        setAhead(100);
-    }
-
-    private double wallSmoothing(Point2D.Double botLocation, double angle, int orientation) {
-        while (!fieldRectangle(18).contains(project(botLocation, angle, 160))) {
-            angle += orientation * 0.05;
-        }
-        return angle;
-    }
-
-    private static Rectangle2D.Double fieldRectangle(int buffer) {
-        return new Rectangle2D.Double(buffer, buffer, 800 - buffer * 2, 600 - buffer * 2);
-    }
-
-    private static Point2D.Double project(Point2D.Double sourceLocation, double angle, double length) {
-        return new Point2D.Double(sourceLocation.x + Math.sin(angle) * length, sourceLocation.y + Math.cos(angle) * length);
+        setBack(50); // Move o robô para trás para se afastar da parede
+        setTurnRight(45); // Ajusta a direção do robô para evitar futuras colisões
+        setAhead(100); // Move o robô para frente
     }
 }
