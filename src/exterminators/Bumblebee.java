@@ -1,11 +1,17 @@
 package exterminators;
 
 import robocode.*;
+import java.awt.Color;
 
 public class Bumblebee extends AdvancedRobot {
 
     @Override
     public void run() {
+        setBodyColor(Color.yellow); // Define a cor do corpo do robô como cinza escuro
+        setGunColor(Color.yellow); // Define a cor da arma do robô como vermelha
+        setRadarColor(Color.YELLOW); // Define a cor do radar do robô como amarela
+        setBulletColor(Color.yellow); // Define a cor das balas disparadas pelo robô como magenta
+        setScanColor(Color.yellow); // Define a cor do feixe de escaneamento do robô como ciano
         // Configurações para que a arma e o radar girem independentemente do corpo do robô
         setAdjustRadarForRobotTurn(true);
         setAdjustGunForRobotTurn(true);
